@@ -1,0 +1,12 @@
+groups:
+  - name: FuelPriceAlerts
+    rules:
+      - alert: FuelPriceSpike
+        expr: fuel_price > 130
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Fuel price too high"
+          description: "Fuel price exceeded ₹130 in one or more cities"
+

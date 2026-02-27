@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    environment:
+      - ELASTIC_URL=http://elasticsearch:9200
+      - ELASTIC_INDEX=fuel-price-events
+      - API_KEY=
+      - FETCH_INTERVAL=15
+      - API_URL=http://mockapi:8000/v1/prices
+      - USE_LIVE_API=1
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+      - mockapi
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
+    ports:
+      - "9090:9090"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+  mockapi:
+    build: ./mock_api
+    ports:
+      - "8000:8000"
+

@@ -1,4 +1,3 @@
-# Fuel-Price-Monitoring-using-Kibana-and-Prometheus-
 # Real-Time Fuel Price Monitoring System
 
 ## Overview
@@ -106,5 +105,6 @@ curl http://localhost:5000/metrics
 curl http://localhost:5000
 ```
 
-
+## Screenshots
+*Optional: Add images showing metrics in Prometheus & dashboards in Kibana*
 
